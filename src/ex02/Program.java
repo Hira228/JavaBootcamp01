@@ -5,10 +5,6 @@ public class Program {
         User c = new User( "Mama", 500);
         User d = new User( "Lala", 500);
 
-//        System.out.println(a);
-//        System.out.println(b);
-//        System.out.println(c);
-//        System.out.println(d);
 
         UsersArrayList arrayList = new UsersArrayList();
 
@@ -22,13 +18,13 @@ public class Program {
         System.out.println(arrayList.getUserById(3));
         System.out.println(arrayList.getUserById(4));
 
-
-        System.out.println(arrayList.getUserByIndex(0));
-        System.out.println(arrayList.getUserByIndex(1));
-        System.out.println(arrayList.getUserByIndex(2));
-        System.out.println(arrayList.getUserByIndex(3));
-//
-//
+        try {
+            System.out.println(arrayList.getUserByIndex(0));
+            System.out.println(arrayList.getUserByIndex(1));
+            System.out.println(arrayList.getUserByIndex(2));
+            System.out.println(arrayList.getUserByIndex(3));
+            //System.out.println(arrayList.getUserByIndex(4));          //Unhandled exception: UserNotFoundException
+        } catch (UserNotFoundException s) {System.out.println(s.getMessage());}
 //        System.out.println(arrayList.getCountUsers());
     }
 }
