@@ -3,8 +3,14 @@ import java.util.UUID;
 public class TransactionsService {
     private UsersArrayList userList;
 
-    private TransactionsList transactionsListCredits;
-    private TransactionsList transactionsListDebits;
+    public TransactionsList transactionsListCredits;
+    public TransactionsList transactionsListDebits;
+
+    TransactionsService() {
+        userList = new UsersArrayList();
+        transactionsListCredits = new TransactionsLinkedList();
+        transactionsListDebits = new TransactionsLinkedList();
+    }
 
     public void addUser(User user) { userList.addUser(user);}
 
@@ -76,22 +82,53 @@ public class TransactionsService {
     }
 
     public Transaction[] getInvalidTransaction()  {
-        TransactionsLinkedList invalidTransactionsList = new TransactionsLinkedList();
-        for (int i = 0; i < transactionsListCredits.toArray().length; ++i) {
+        TransactionsList invalidTransactionsList1 = new TransactionsLinkedList();
+        TransactionsList invalidTransactionsList2 = new TransactionsLinkedList();
+
+        Transaction[] creditsArray = transactionsListCredits.toArray();
+        Transaction[] debitsArray = transactionsListDebits.toArray();
+
+        for (int i = 0; i < creditsArray.length; ++i) {
+            if (creditsArray[i] == null) {
+                continue; // Пропускаем null элементы
+            }
+
             boolean foundMatch = false;
 
-            for (int j = 0; j < transactionsListDebits.toArray().length; ++j) {
-                if (transactionsListCredits.toArray()[i].getIdentifier().equals(transactionsListDebits.toArray()[j].getIdentifier())) {
+            for (int j = 0; j < debitsArray.length; ++j) {
+                if (debitsArray[j] != null && creditsArray[i].getIdentifier().equals(debitsArray[j].getIdentifier())) {
                     foundMatch = true;
                     break;
                 }
             }
+
             if (!foundMatch) {
-                invalidTransactionsList.addTransaction(transactionsListCredits.toArray()[i]);
+                invalidTransactionsList1.addTransaction(creditsArray[i]);
             }
         }
 
-        return invalidTransactionsList.toArray();
+        for (int i = 0; i < debitsArray.length; ++i) {
+            if (debitsArray[i] == null) {
+                continue; // Пропускаем null элементы
+            }
+
+            boolean foundMatch = false;
+
+            for (int j = 0; j < creditsArray.length; ++j) {
+                if (creditsArray[j] != null && debitsArray[i].getIdentifier().equals(creditsArray[j].getIdentifier())) {
+                    foundMatch = true;
+                    break;
+                }
+            }
+
+            if (!foundMatch) {
+                invalidTransactionsList2.addTransaction(debitsArray[i]);
+            }
+        }
+
+//        for(int i = 0; i < transactionsListCredits.toArray().length; ++i) System.out.println(transactionsListCredits.toArray()[i]);
+        return invalidTransactionsList1.toArray().length > invalidTransactionsList2.toArray().length ? invalidTransactionsList1.toArray() : invalidTransactionsList2.toArray();
     }
+
 
 }

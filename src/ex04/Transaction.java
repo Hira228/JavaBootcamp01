@@ -12,13 +12,13 @@ final public class Transaction {
     private final TypeTransferCategory TransferCategory;
     long TransferAmount;
 
-    public Transaction(User Recipient, User Sender, final long TransferAmount, TypeTransferCategory TransferCategory, UUID Identifier) throws  IllegalTransactionException{
+    public Transaction(User Recipient, User Sender, final long TransferAmount, TypeTransferCategory TransferCategory, UUID Identifier) throws IllegalTransactionException {
         if(TransferCategory == TypeTransferCategory.DEBITS && TransferAmount > 0) {
             Recipient.setBalance(Recipient.getBalance() + TransferAmount);
         }
-        else if(TransferCategory == TypeTransferCategory.CREDITS && TransferAmount < 0) {
-            Sender.setBalance(Sender.getBalance() - TransferAmount);
-        } else throw new IllegalTransactionException("Invalid transfer category or amount");
+        else if(TransferCategory == TypeTransferCategory.CREDITS && TransferAmount < 0 && Sender.getBalance() >= -TransferAmount) {
+            Sender.setBalance(Sender.getBalance() + TransferAmount);
+        } else throw new IllegalTransactionException("Insufficient funds to make a transaction");
         this.Recipient = Recipient;
         this.Sender = Sender;
         this.TransferCategory = TransferCategory;

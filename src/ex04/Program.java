@@ -4,35 +4,53 @@ public class Program {
     public static void main(String[] args) {
         User a = new User("Matvey", 1000);
         User b = new User( "Aboba", 500);
+        User c = new User( "Aboba", 500);
 
+        TransactionsService service = new TransactionsService();
 
-//        Transaction t = new Transaction(b, a,500, Transaction.TypeTransferCategory.DEBITS);
-//        Transaction tt = new Transaction(b, a,  500, Transaction.TypeTransferCategory.DEBITS);
-//        Transaction ttt = new Transaction(b, a,  500, Transaction.TypeTransferCategory.DEBITS);
+        service.addUser(a);
+        service.addUser(b);
 
-        UUID kkk = UUID.randomUUID();
-
-        TransactionsLinkedList list = new TransactionsLinkedList();
-//        list.addTransaction(t);
-//        list.addTransaction(tt);
-//        list.addTransaction(ttt);
-//        Transaction[] arr = list.toArray();
-//        System.out.println("Arr Before Remove");
-//        for(int i = 0; i < arr.length; ++i) System.out.println(arr[i]);
-//
-//        try {
-//            list.removeTransaction(tt.getIdentifier());
-//        } catch (TransactionNotFoundException s) {System.out.println(s.getMessage());}
-
-        Transaction[] arrAfterRemove = list.toArray();
-        System.out.println("Arr After Remove");
-        for(int i = 0; i < arrAfterRemove.length; ++i) System.out.println(arrAfterRemove[i]);
-
-        System.out.println("Remove unknown UUID");
-
-        // Remove unknown UUID
         try {
-            list.removeTransaction(kkk);
-        } catch (TransactionNotFoundException s) {System.out.println("-> " + s.getMessage());}
+            System.out.println("Balance before transaction");
+            System.out.println("-> " + service.getBalanceUser(a));
+            System.out.println("-> " + service.getBalanceUser(b));
+            service.makeTransaction(a.getIdentifier(), b.getIdentifier(), 100);
+            service.makeTransaction(a.getIdentifier(), b.getIdentifier(), 100);
+            service.makeTransaction(a.getIdentifier(), b.getIdentifier(), 100);
+
+            Transaction[] arrA = service.getTransactionsUser(a);
+            Transaction[] arrB = service.getTransactionsUser(b);
+            System.out.println("Transaction User A");
+            for (Transaction transaction : arrA) System.out.println("-> " + transaction);
+            System.out.println("Transaction User B");
+            for (Transaction transaction : arrB) System.out.println("-> " + transaction);
+            System.out.println("Balance after transaction");
+            System.out.println("-> " + service.getBalanceUser(a));
+            System.out.println("-> " + service.getBalanceUser(b));
+
+            System.out.println("Remove transaction from user A");
+            service.removeTransactionUser(arrA[0].getIdentifier(), a.getIdentifier());
+            arrA = service.getTransactionsUser(a);
+            arrB = service.getTransactionsUser(b);
+            System.out.println("Transaction User A");
+            for (Transaction transaction : arrA) System.out.println("-> " + transaction);
+            System.out.println("Transaction User B");
+            for (Transaction transaction : arrB) System.out.println("-> " + transaction);
+
+            System.out.println("Invalid Transactions");
+            Transaction[] invalid = service.getInvalidTransaction();
+
+            for (Transaction transaction : invalid) System.out.println("-> " + transaction);
+
+            service.makeTransaction(a.getIdentifier(), b.getIdentifier(), 201);   // insufficient funds to make a transaction
+            System.out.println("Balance after transaction");
+            System.out.println("-> " + service.getBalanceUser(a));
+            System.out.println("-> " + service.getBalanceUser(b));
+
+
+        } catch (TransactionNotFoundException s) { System.out.println(s.getMessage());}
+
+
     }
 }

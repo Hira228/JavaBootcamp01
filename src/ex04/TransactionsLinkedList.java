@@ -21,7 +21,9 @@ public class TransactionsLinkedList implements TransactionsList {
 
     @Override
     public void removeTransaction(UUID identifier) throws TransactionNotFoundException {
-        if (Head == null) throw new TransactionNotFoundException("Transaction not found!");
+        if (Head == null) {
+            throw new TransactionNotFoundException("Transaction not found!");
+        }
 
         if (Head.getIdentifier().equals(identifier)) {
             Head = Head.getNext();
@@ -44,16 +46,18 @@ public class TransactionsLinkedList implements TransactionsList {
 
 
     @Override
-    public Transaction[] toArray(){
+    public Transaction[] toArray() {
         Transaction[] arr = new Transaction[CountTransactions];
         Transaction temp = Head;
         int count = 0;
-        while(temp != null) {
+        while (temp != null && count < CountTransactions) {
             arr[count] = temp;
             temp = temp.getNext();
             count++;
         }
         return arr;
-
     }
+
+    @Override
+    public int getCountTransactions() { return CountTransactions; }
 }

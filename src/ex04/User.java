@@ -10,6 +10,7 @@ final public class User {
         this.Identifier = UserIdsGenerator.getInstance().generateId();
         this.Name = Name;
         this.Balance = Balance < 0 ? 0 : Balance;
+        TransactionsList = new TransactionsLinkedList();
     }
     //Getters
     public int getIdentifier() { return Identifier; }
