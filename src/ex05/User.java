@@ -5,7 +5,7 @@ final public class User {
     private String Name;
     private long Balance;
 
-    private TransactionsList TransactionsList;
+    private final TransactionsList TransactionsList;
     public User (final String Name, final long Balance) {
         this.Identifier = UserIdsGenerator.getInstance().generateId();
         this.Name = Name;

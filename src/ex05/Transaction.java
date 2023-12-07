@@ -6,6 +6,7 @@ final public class Transaction {
         DEBITS,
         CREDITS
     }
+    public int outputOption = 1;
     private Transaction  Next;
     private final UUID Identifier;
     private final User Recipient;
@@ -13,7 +14,7 @@ final public class Transaction {
 
     private final int ownerTransaction;
     private final TypeTransferCategory TransferCategory;
-    long TransferAmount;
+    private final long TransferAmount;
 
     public Transaction(User Recipient, User Sender, final long TransferAmount, TypeTransferCategory TransferCategory, UUID Identifier) throws IllegalTransactionException {
         if(TransferCategory == TypeTransferCategory.DEBITS && TransferAmount > 0) {
@@ -48,14 +49,27 @@ final public class Transaction {
 
     @Override
     public String toString() {
-        if(ownerTransaction == Recipient.getIdentifier()) {
-            return "From " + Sender.getName() +
-                    "(id = " + Sender.getIdentifier() + ") " + "+" + TransferAmount +
+        if (outputOption == 1) {
+            if (ownerTransaction == Recipient.getIdentifier()) {
+                return "From " + Sender.getName() +
+                        "(id = " + Sender.getIdentifier() + ") " + "+" + TransferAmount +
+                        " with id = " + Identifier;
+            }
+            return "To " + Recipient.getName() +
+                    "(id = " + Recipient.getIdentifier() + ") " + TransferAmount +
                     " with id = " + Identifier;
         }
-        return "To " + Recipient.getName() +
-                "(id = " + Recipient.getIdentifier() + ") " + TransferAmount +
-                " with id = " + Identifier;
+        else if(outputOption == 2) {
+            return "Transfer To " + Recipient.getName() + "(id = " + Recipient.getIdentifier() + ") " + (TransferAmount < 0 ? -TransferAmount : TransferAmount) + " removed";
+        }
+        return (ownerTransaction == Recipient.getIdentifier() ? Recipient.getName() : Sender.getName()) + "(id = "
+                + ownerTransaction + ") has an unacknowledged transfer id = " + Identifier + (TransferAmount > 0 ? " from " : " to ") +
+                (ownerTransaction == Recipient.getIdentifier() ? Sender.getName() : Recipient.getName()) +
+                "(id = " + (ownerTransaction == Recipient.getIdentifier() ? Sender.getIdentifier() : Recipient.getIdentifier()) +
+                ") for " + TransferAmount;
+
     }
 
+
 }
+

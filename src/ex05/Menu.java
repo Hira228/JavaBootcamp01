@@ -3,6 +3,7 @@ import java.util.UUID;
 
 public class Menu {
     TransactionsService service;
+
     Menu() { service = new TransactionsService(); }
 
     public void printMenu() {
@@ -29,10 +30,20 @@ public class Menu {
                             printMenu();
                         }
                         case 2 -> {
-                            System.out.println("Enter a user ID");
-                            int id = in_.nextInt();
-                            System.out.println(service.getUserName(id) + " - " + service.getBalanceUser(id));
-                            System.out.println("---------------------------------------------------------");
+                            boolean retry;
+                            do {
+                                try {
+                                    System.out.println("Enter a user ID");
+                                    int id = in_.nextInt();
+                                    System.out.println(service.getUserName(id) + " - " + service.getBalanceUser(id));
+                                    System.out.println("---------------------------------------------------------");
+                                    retry = false;
+                                } catch (UserNotFoundException e) {
+                                    System.out.println(e.getMessage());
+                                    System.out.println("Please try again");
+                                    retry = true;
+                                }
+                            } while(retry);
                             printMenu();
                         }
                         case 3 -> {
@@ -44,38 +55,63 @@ public class Menu {
                                     System.out.println("The transfer is completed");
                                     System.out.println("---------------------------------------------------------");
                                     retry = false;
-                                } catch (IllegalTransactionException e) {
+                                } catch (IllegalTransactionException | UserNotFoundException e) {
                                     System.out.println(e.getMessage());
-                                    System.out.println("Please enter the amount that meets your balance");
+                                    System.out.println("Please try again");
                                     retry = true;
                                 }
                             } while (retry);
                             printMenu();
                         }
                         case 4 -> {
-                            System.out.println("Enter a user ID");
-                            Transaction[] transactions = service.getTransactionsUser(in_.nextInt());
-                            for(Transaction transaction : transactions) System.out.println(transaction);
-                            System.out.println("---------------------------------------------------------");
+                            boolean retry;
+                            do {
+                                try {
+                                    System.out.println("Enter a user ID");
+                                    Transaction[] transactions = service.getTransactionsUser(in_.nextInt());
+                                    for (Transaction transaction : transactions) System.out.println(transaction);
+                                    System.out.println("---------------------------------------------------------");
+                                    retry = false;
+                                } catch (UserNotFoundException e) {
+                                    System.out.println(e.getMessage());
+                                    System.out.println("Please try again");
+                                    retry = true;
+                                }
+                            } while (retry);
                             printMenu();
                         }
                         case 5 -> {
-                            try {
-                                System.out.println("Enter a user ID and a transfer ID");
-                                Transaction remove = service.removeTransactionUser(in_.nextInt(), UUID.fromString(in_.next()));
-                                System.out.println(remove + " removed");
-                                System.out.println("---------------------------------------------------------");
-                                printMenu();
-                            } catch (TransactionNotFoundException e) {
-                                System.out.println(e.getMessage());
-                            }
+                            boolean retry;
+                            do {
+                                try {
+                                    System.out.println("Enter a user ID and a transfer ID");
+                                    Transaction remove = service.removeTransactionUser(in_.nextInt(), UUID.fromString(in_.next()));
+                                    remove.outputOption = 2;
+                                    System.out.println(remove);
+                                    remove.outputOption = 1;
+                                    System.out.println("---------------------------------------------------------");
+                                    retry = false;
+                                } catch (TransactionNotFoundException | UserNotFoundException e) {
+                                    System.out.println(e.getMessage());
+                                    System.out.println("Please try again");
+                                    retry = true;
+                                }
+                            } while(retry);
+                            printMenu();
                         }
                         case 6 -> {
-//                            System.out.println("Check results:");
-//                            Transaction[] invalidTransactions = service.getInvalidTransaction();
-//                            for(Transaction transaction : invalidTransactions) {
-//
-//                            }System.out.println("Transfer "transaction.);
+                            System.out.println("Check results:");
+                            Transaction[] invalidTransactions = service.getInvalidTransaction();
+                            if(invalidTransactions.length == 0) System.out.println("All transactions are valid");
+                            else {
+                                for (Transaction transaction : invalidTransactions) {
+                                    transaction.outputOption = 3;
+                                    System.out.println(transaction);
+                                    transaction.outputOption = 1;
+                                }
+                            }
+                            System.out.println("---------------------------------------------------------");
+                            printMenu();
                         }
                         case 7 -> {
                             return;
