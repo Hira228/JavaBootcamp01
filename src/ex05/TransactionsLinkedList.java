@@ -5,11 +5,14 @@ public class TransactionsLinkedList implements TransactionsList {
     private Transaction Current;
     private int CountTransactions = 0;
 
-    public TransactionsLinkedList() {}
+    public TransactionsLinkedList() {
+        Head = null;
+        Current = null;
+    }
 
     @Override
-    public void addTransaction(Transaction transaction){
-        if(CountTransactions == 0){
+    public void addTransaction(Transaction transaction) {
+        if (Current == null) {
             Head = transaction;
             Current = transaction;
         } else {
@@ -33,17 +36,18 @@ public class TransactionsLinkedList implements TransactionsList {
         }
 
         Transaction temp = Head;
-        while (temp.getNext() != null) {
-            if (temp.getNext().getIdentifier().equals(identifier)) {
-                Transaction remove = temp.getNext();
-                temp.setNext(temp.getNext().getNext());
-                CountTransactions--;
-                return remove;
-            }
+        while (temp.getNext() != null && !temp.getNext().getIdentifier().equals(identifier)) {
             temp = temp.getNext();
         }
 
-        throw new TransactionNotFoundException("Transaction not found!");
+        if (temp.getNext() != null) {
+            Transaction remove = temp.getNext();
+            temp.setNext(temp.getNext().getNext());
+            CountTransactions--;
+            return remove;
+        } else {
+            throw new TransactionNotFoundException("Transaction not found!");
+        }
     }
 
 
@@ -51,11 +55,9 @@ public class TransactionsLinkedList implements TransactionsList {
     public Transaction[] toArray() {
         Transaction[] arr = new Transaction[CountTransactions];
         Transaction temp = Head;
-        int count = 0;
-        while (temp != null && count < CountTransactions) {
-            arr[count] = temp;
+        for(int i = 0; i < CountTransactions && temp != null; ++i) {
+            arr[i] = temp;
             temp = temp.getNext();
-            count++;
         }
         return arr;
     }
