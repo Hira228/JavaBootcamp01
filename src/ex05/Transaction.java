@@ -7,7 +7,6 @@ final public class Transaction {
         CREDITS
     }
     public int outputOption = 1;
-    private Transaction  Next;
     private final UUID Identifier;
     private final User Recipient;
     private final User Sender;
@@ -40,12 +39,8 @@ final public class Transaction {
     public User getSender() { return Sender; }
     public TypeTransferCategory getTransferCategory() { return TransferCategory; }
     public long getTransferAmount() { return TransferAmount; }
-    public Transaction getNext() { return Next == null ? null : Next; }
     public int getOwnerTransaction() { return ownerTransaction; }
 
-
-    //setters
-    public void setNext(Transaction next) { Next = next; }
 
     @Override
     public String toString() {

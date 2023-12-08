@@ -22,24 +22,26 @@ public class TransactionsService {
         UUID identifier = UUID.randomUUID();
         try {
             if(idSender == idRecipient) throw new UserNotFoundException("You can't send money to yourself");
-            userList.getUserById(idRecipient).getTransactionsList().addTransaction(
-                    new Transaction(
-                            userList.getUserById(idRecipient),
-                            userList.getUserById(idSender),
-                            transferAmount,
-                            Transaction.TypeTransferCategory.DEBITS,
-                            identifier
-                    )
+            userList.getUserById(idRecipient).getTransactionsList().addTransaction(new TransactionNode(
+                            new Transaction(
+                                    userList.getUserById(idRecipient),
+                                    userList.getUserById(idSender),
+                                    transferAmount,
+                                    Transaction.TypeTransferCategory.DEBITS,
+                                    identifier
+                            )
+            )
             );
 
-
             userList.getUserById(idSender).getTransactionsList().addTransaction(
-                    new Transaction(
-                            userList.getUserById(idRecipient),
-                            userList.getUserById(idSender),
-                            -transferAmount,
-                            Transaction.TypeTransferCategory.CREDITS,
-                            identifier
+                    new TransactionNode(
+                        new Transaction(
+                                userList.getUserById(idRecipient),
+                                userList.getUserById(idSender),
+                                -transferAmount,
+                                Transaction.TypeTransferCategory.CREDITS,
+                                identifier
+                        )
                     )
             );
         } catch (UserNotFoundException s) { throw new UserNotFoundException(s.getMessage()); }
@@ -72,19 +74,19 @@ public class TransactionsService {
             for (int j = 0; j < userList.getUserByIndex(i).getTransactionsList().toArray().length; ++j) {
                 Transaction currentTransaction = userList.getUserByIndex(i).getTransactionsList().toArray()[j];
                 if (currentTransaction != null && currentTransaction.getTransferCategory().equals(Transaction.TypeTransferCategory.CREDITS)) {
-                    transactionsListCredits.addTransaction(currentTransaction);
+                    transactionsListCredits.addTransaction(new TransactionNode(currentTransaction));
                 } else if (currentTransaction != null) {
-                    transactionsListDebits.addTransaction(currentTransaction);
+                    transactionsListDebits.addTransaction(new TransactionNode(currentTransaction));
                 }
             }
         }
-        for (int i = 0; i < userList.getCountUsers(); ++i) {
-            System.out.println("-----------start");
-            for (int j = 0; j < userList.getUserByIndex(i).getTransactionsList().toArray().length && userList.getUserByIndex(i).getTransactionsList().toArray()[j] != null; ++j) {
-                System.out.println(userList.getUserByIndex(i).getTransactionsList().toArray()[j]);
-            }
-            System.out.println("-----------end");
-        }
+//        for (int i = 0; i < userList.getCountUsers(); ++i) {
+//            System.out.println("-----------start");
+//            for (int j = 0; j < userList.getUserByIndex(i).getTransactionsList().toArray().length && userList.getUserByIndex(i).getTransactionsList().toArray()[j] != null; ++j) {
+//                System.out.println(userList.getUserByIndex(i).getTransactionsList().toArray()[j]);
+//            }
+//            System.out.println("-----------end");
+//        }
 //        System.out.println("-----------start");
 //        for(Transaction transaction : transactionsListCredits.toArray()) System.out.println(transaction);
 //        for(Transaction transaction : transactionsListDebits.toArray()) System.out.println(transaction);
@@ -109,7 +111,7 @@ public class TransactionsService {
             }
 
             if (!find && transaction != null) {
-                invalidTransactions.addTransaction(transaction);
+                invalidTransactions.addTransaction(new TransactionNode(transaction));
             }
         }
     }

@@ -1,8 +1,8 @@
 import java.util.UUID;
 
 public class TransactionsLinkedList implements TransactionsList {
-    private Transaction Head;
-    private Transaction Current;
+    private TransactionNode Head;
+    private TransactionNode Current;
     private int CountTransactions = 0;
 
     public TransactionsLinkedList() {
@@ -11,7 +11,7 @@ public class TransactionsLinkedList implements TransactionsList {
     }
 
     @Override
-    public void addTransaction(Transaction transaction) {
+    public void addTransaction(TransactionNode transaction) {
         if (Current == null) {
             Head = transaction;
             Current = transaction;
@@ -28,23 +28,23 @@ public class TransactionsLinkedList implements TransactionsList {
             throw new TransactionNotFoundException("Transaction not found!");
         }
 
-        if (Head.getIdentifier().equals(identifier)) {
-            Transaction remove = Head;
+        if (Head.getTransaction().getIdentifier().equals(identifier)) {
+            TransactionNode remove = Head;
             Head = Head.getNext();
             CountTransactions--;
-            return remove;
+            return remove.getTransaction();
         }
 
-        Transaction temp = Head;
-        while (temp.getNext() != null && !temp.getNext().getIdentifier().equals(identifier)) {
+        TransactionNode temp = Head;
+        while (temp.getNext() != null && !temp.getNext().getTransaction().getIdentifier().equals(identifier)) {
             temp = temp.getNext();
         }
 
         if (temp.getNext() != null) {
-            Transaction remove = temp.getNext();
+            TransactionNode remove = temp.getNext();
             temp.setNext(temp.getNext().getNext());
             CountTransactions--;
-            return remove;
+            return remove.getTransaction();
         } else {
             throw new TransactionNotFoundException("Transaction not found!");
         }
@@ -54,9 +54,9 @@ public class TransactionsLinkedList implements TransactionsList {
     @Override
     public Transaction[] toArray() {
         Transaction[] arr = new Transaction[CountTransactions];
-        Transaction temp = Head;
+        TransactionNode temp = Head;
         for(int i = 0; i < CountTransactions && temp != null; ++i) {
-            arr[i] = temp;
+            arr[i] = temp.getTransaction();
             temp = temp.getNext();
         }
         return arr;
