@@ -98,7 +98,7 @@ public class Menu {
         printMenu();
     }
 
-    private void buttonClickedSix(Scanner in_) {
+    private void buttonClickedSix() {
         System.out.println("Check results:");
         Transaction[] invalidTransactions = service.getInvalidTransaction();
         if(invalidTransactions.length == 0) System.out.println("All transactions are valid");
@@ -114,34 +114,34 @@ public class Menu {
     }
 
     public void runMenu(String[] s) {
-        if (s[0].equals("--profile=dev")) {
-            Scanner in_ = new Scanner(System.in);
-            printMenu();
-                while (in_.hasNextInt()) {
-                    switch (in_.nextInt()) {
-                        case 1 -> {
-                            buttonClickedOne(in_);
+        Scanner in_ = new Scanner(System.in);
+        printMenu();
+            while (in_.hasNextInt()) {
+                switch (in_.nextInt()) {
+                    case 1 -> buttonClickedOne(in_);
+                    case 2 -> buttonClickedTwo(in_);
+                    case 3 -> buttonClickedThree(in_);
+                    case 4 -> buttonClickedFour(in_);
+                    case 5 -> {
+                        if(s.length > 0 && s[0].equals("--profile=dev")) buttonClickedFive(in_);
+                        else {
+                            System.out.println("You don't have enough rights");
+                            System.out.println("---------------------------------------------------------");
+                            printMenu();
                         }
-                        case 2 -> {
-                            buttonClickedTwo(in_);
-                        }
-                        case 3 -> {
-                            buttonClickedThree(in_);
-                        }
-                        case 4 -> {
-                            buttonClickedFour(in_);
-                        }
-                        case 5 -> {
-                            buttonClickedFive(in_);
-                        }
-                        case 6 -> {
-                            buttonClickedSix(in_);
-                        }
-                        case 7 -> {
-                            return;
-                        }
-                        default -> printMenu();
                     }
+                    case 6 -> {
+                        if(s.length > 0 && s[0].equals("--profile=dev")) buttonClickedSix();
+                        else {
+                            System.out.println("You don't have enough rights");
+                            System.out.println("---------------------------------------------------------");
+                            printMenu();
+                        }
+                    }
+                    case 7 -> {
+                        return;
+                    }
+                    default -> printMenu();
                 }
             }
         }

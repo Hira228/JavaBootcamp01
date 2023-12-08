@@ -13,9 +13,9 @@ public class Program {
         UUID kkk = UUID.randomUUID();
 
         TransactionsLinkedList list = new TransactionsLinkedList();
-        list.addTransaction(t);
-        list.addTransaction(tt);
-        list.addTransaction(ttt);
+        list.addTransaction(new TransactionNode(t));
+        list.addTransaction(new TransactionNode(tt));
+        list.addTransaction(new TransactionNode(ttt));
         Transaction[] arr = list.toArray();
         System.out.println("Arr Before Remove");
         for(int i = 0; i < arr.length; ++i) System.out.println(arr[i]);

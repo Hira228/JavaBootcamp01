@@ -6,20 +6,20 @@ public class Program {
         System.out.println(a);
         System.out.println(b);
 
-        Transaction t = new Transaction(b, a, 500);
+        Transaction t = new Transaction(b, a, Transaction.TypeTransferCategory.CREDITS , 500);
 
 
         System.out.println(t);
 
         System.out.println(a);
         System.out.println(b);
-        Transaction tt = new Transaction(b, a,  500);
+        Transaction tt = new Transaction(b, a, Transaction.TypeTransferCategory.DEBITS, 500);
         System.out.println(tt);
 
         System.out.println(a);
         System.out.println(b);
 
-        Transaction ttt = new Transaction(b, a,  500);
+        Transaction ttt = new Transaction(b, a,  Transaction.TypeTransferCategory.CREDITS,500);
         System.out.println(ttt);
 
         System.out.println(a);

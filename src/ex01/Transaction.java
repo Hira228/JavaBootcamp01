@@ -6,15 +6,22 @@ final public class Transaction {
         CREDITS
     }
 
-    public Transaction(User Recipient, User Sender, final long TransferAmount) {
-        this.Recipient = Recipient;
-        this.Sender = Sender;
-        Recipient.setBalance(Recipient.getBalance() + TransferAmount);
-        Sender.setBalance(Sender.getBalance() - TransferAmount);
-        this.TransferCategory = Sender.getBalance() >= 0 ? TypeTransferCategory.DEBITS : TypeTransferCategory.CREDITS;
-        this.TransferAmount = TransferAmount;
-    }
+    public Transaction(User recipient, User sender, TypeTransferCategory transferCategory, final long transferAmount) {
+        this.Recipient = recipient;
+        this.Sender = sender;
+        this.TransferCategory = transferCategory;
+        this.TransferAmount = transferAmount;
 
+        if (transferCategory == TypeTransferCategory.CREDITS && transferAmount > 0) {
+            recipient.setBalance(recipient.getBalance() + transferAmount);
+            sender.setBalance(sender.getBalance() - transferAmount);
+        } else if (transferCategory == TypeTransferCategory.DEBITS && transferAmount < 0) {
+            recipient.setBalance(recipient.getBalance() + transferAmount);
+            sender.setBalance(sender.getBalance() - transferAmount);
+        } else {
+            throw new IllegalArgumentException("Invalid transaction category or amount");
+        }
+    }
     private final UUID Identifier = UUID.randomUUID();
     private final User Recipient;
     private final User Sender;

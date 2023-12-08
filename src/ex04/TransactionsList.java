@@ -1,8 +1,8 @@
 import java.util.UUID;
 
 public interface TransactionsList {
-    void addTransaction(Transaction transaction);
-    void removeTransaction(UUID identifier) throws TransactionNotFoundException;
+    void addTransaction(TransactionNode transaction);
+    Transaction removeTransaction(UUID identifier) throws TransactionNotFoundException;
     Transaction[] toArray();
     int getCountTransactions();
 }

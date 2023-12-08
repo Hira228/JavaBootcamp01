@@ -13,26 +13,26 @@ public class Program {
 
         try {
             System.out.println("Balance before transaction");
-            System.out.println("-> " + service.getBalanceUser(a));
-            System.out.println("-> " + service.getBalanceUser(b));
+            System.out.println("-> " + service.getBalanceUser(a.getIdentifier()));
+            System.out.println("-> " + service.getBalanceUser(b.getIdentifier()));
             service.makeTransaction(a.getIdentifier(), b.getIdentifier(), 100);
             service.makeTransaction(a.getIdentifier(), b.getIdentifier(), 100);
             service.makeTransaction(a.getIdentifier(), b.getIdentifier(), 100);
 
-            Transaction[] arrA = service.getTransactionsUser(a);
-            Transaction[] arrB = service.getTransactionsUser(b);
+            Transaction[] arrA = service.getTransactionsUser(a.getIdentifier());
+            Transaction[] arrB = service.getTransactionsUser(b.getIdentifier());
             System.out.println("Transaction User A");
             for (Transaction transaction : arrA) System.out.println("-> " + transaction);
             System.out.println("Transaction User B");
             for (Transaction transaction : arrB) System.out.println("-> " + transaction);
             System.out.println("Balance after transaction");
-            System.out.println("-> " + service.getBalanceUser(a));
-            System.out.println("-> " + service.getBalanceUser(b));
+            System.out.println("-> " + service.getBalanceUser(a.getIdentifier()));
+            System.out.println("-> " + service.getBalanceUser(b.getIdentifier()));
 
             System.out.println("Remove transaction from user A");
-            service.removeTransactionUser(arrA[0].getIdentifier(), a.getIdentifier());
-            arrA = service.getTransactionsUser(a);
-            arrB = service.getTransactionsUser(b);
+            service.removeTransactionUser(a.getIdentifier(), arrA[0].getIdentifier());
+            arrA = service.getTransactionsUser(a.getIdentifier());
+            arrB = service.getTransactionsUser(b.getIdentifier());
             System.out.println("Transaction User A");
             for (Transaction transaction : arrA) System.out.println("-> " + transaction);
             System.out.println("Transaction User B");
@@ -43,10 +43,7 @@ public class Program {
 
             for (Transaction transaction : invalid) System.out.println("-> " + transaction);
 
-            service.makeTransaction(a.getIdentifier(), b.getIdentifier(), 201);   // insufficient funds to make a transaction
-            System.out.println("Balance after transaction");
-            System.out.println("-> " + service.getBalanceUser(a));
-            System.out.println("-> " + service.getBalanceUser(b));
+            service.makeTransaction(a.getIdentifier(), b.getIdentifier(), 10000);   // insufficient funds to make a transaction
 
 
         } catch (TransactionNotFoundException s) { System.out.println(s.getMessage());}

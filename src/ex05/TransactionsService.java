@@ -80,18 +80,6 @@ public class TransactionsService {
                 }
             }
         }
-//        for (int i = 0; i < userList.getCountUsers(); ++i) {
-//            System.out.println("-----------start");
-//            for (int j = 0; j < userList.getUserByIndex(i).getTransactionsList().toArray().length && userList.getUserByIndex(i).getTransactionsList().toArray()[j] != null; ++j) {
-//                System.out.println(userList.getUserByIndex(i).getTransactionsList().toArray()[j]);
-//            }
-//            System.out.println("-----------end");
-//        }
-//        System.out.println("-----------start");
-//        for(Transaction transaction : transactionsListCredits.toArray()) System.out.println(transaction);
-//        for(Transaction transaction : transactionsListDebits.toArray()) System.out.println(transaction);
-//        System.out.println("-----------end");
-
         if (transactionsListCredits.toArray().length > 0 && transactionsListDebits.toArray().length > 0) {
             checkInvalidTransactions(transactionsListCredits, transactionsListDebits, invalidTransactions);
             checkInvalidTransactions(transactionsListDebits, transactionsListCredits, invalidTransactions);

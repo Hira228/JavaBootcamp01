@@ -23,7 +23,7 @@ public class Program {
             System.out.println(arrayList.getUserByIndex(1));
             System.out.println(arrayList.getUserByIndex(2));
             System.out.println(arrayList.getUserByIndex(3));
-            //System.out.println(arrayList.getUserByIndex(4));          //Unhandled exception: UserNotFoundException
+            System.out.println(arrayList.getUserByIndex(4));          //Unhandled exception: UserNotFoundException
         } catch (UserNotFoundException s) {System.out.println(s.getMessage());}
 //        System.out.println(arrayList.getCountUsers());
     }
